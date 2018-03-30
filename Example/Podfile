@@ -2,10 +2,12 @@ use_frameworks!
 
 target 'DSMKit_Example' do
   pod 'DSMKit', :path => '../'
-
+  pod 'Alamofire'
+  pod 'Kingfisher'
+  pod 'KeychainSwift'
+  
   target 'DSMKit_Tests' do
     inherit! :search_paths
-
-    
   end
 end
+

@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'DSMKit'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of DSMKit.'
+  s.summary          = 'Swift library for Synology DSM APIs'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,17 +18,19 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+                       DSMKit is a Swift library for Synology DSM APIs.
+                       It provides parameter encoding, Codable types for JSON responses and convenient classes, extensions and functions.
                        DESC
 
-  s.homepage         = 'https://github.com/Changbeom Ahn/DSMKit'
+  s.homepage         = 'https://github.com/kewlbear/DSMKit'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Changbeom Ahn' => 'kewlbear@gmail.com' }
-  s.source           = { :git => 'https://github.com/Changbeom Ahn/DSMKit.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/kewlbear/DSMKit.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
+  s.swift_version = '4.0'
 
   s.source_files = 'DSMKit/Classes/**/*'
   

@@ -15,6 +15,8 @@
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		9090F648A0628E1CF48D6A31 /* Pods_DSMKit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8663CB15420516BF03D83C0 /* Pods_DSMKit_Tests.framework */; };
 		9DDE03D2D9A4BFCA068EEA57 /* Pods_DSMKit_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2ACA0AE87D230C9B76C683F /* Pods_DSMKit_Example.framework */; };
+		E169C201202BD68A00DCE2E5 /* DSMKitAlamofireTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169C1FF202BD12400DCE2E5 /* DSMKitAlamofireTests.swift */; };
+		E1F294E92031191E0051C913 /* TheSwiftProgrammingLanguage(Swift4.1).epub in Resources */ = {isa = PBXBuildFile; fileRef = E1F294E82031191E0051C913 /* TheSwiftProgrammingLanguage(Swift4.1).epub */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,9 +27,17 @@
 			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
 			remoteInfo = DSMKit;
 		};
+		E169C1F0202BD01200DCE2E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
+			remoteInfo = DSMKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		57613424F1A7C2326CCDD2BC /* Pods-DSMKit_Example-DSMKit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSMKit_Example-DSMKit_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DSMKit_Example-DSMKit_Tests/Pods-DSMKit_Example-DSMKit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* DSMKit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DSMKit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -39,14 +49,20 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		60A5F942DE5E92576EE01A48 /* Pods-DSMKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSMKit_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DSMKit_Example/Pods-DSMKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		678752CCC129612766FA3120 /* DSMKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = DSMKit.podspec; path = ../DSMKit.podspec; sourceTree = "<group>"; };
+		678752CCC129612766FA3120 /* DSMKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = DSMKit.podspec; path = ../DSMKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		72DE06501F9B9BB5A321337D /* Pods-DSMKit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSMKit_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DSMKit_Tests/Pods-DSMKit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		9E68ABD439B663C7BF0B933A /* Pods-DSMKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSMKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-DSMKit_Example/Pods-DSMKit_Example.release.xcconfig"; sourceTree = "<group>"; };
 		B2ACA0AE87D230C9B76C683F /* Pods_DSMKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DSMKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BD3995D27F2016B2D040115C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		BD3995D27F2016B2D040115C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		C0E470F376CC1679EC505B1F /* Pods_DSMKit_Example_DSMKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DSMKit_Example_DSMKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D988A3B4C3A4F75D8E4C04 /* Pods-DSMKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSMKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-DSMKit_Tests/Pods-DSMKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		E169C1FD202BD01200DCE2E5 /* DSMKit_Alamofire_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DSMKit_Alamofire_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E169C1FE202BD01200DCE2E5 /* DSMKit_Alamofire_Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "DSMKit_Alamofire_Tests-Info.plist"; path = "/Users/changbeomahn/Projects/tmp/public/DSMKit/Example/Tests/DSMKit_Alamofire_Tests-Info.plist"; sourceTree = "<absolute>"; };
+		E169C1FF202BD12400DCE2E5 /* DSMKitAlamofireTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSMKitAlamofireTests.swift; sourceTree = "<group>"; };
+		E1F294E82031191E0051C913 /* TheSwiftProgrammingLanguage(Swift4.1).epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TheSwiftProgrammingLanguage(Swift4.1).epub"; sourceTree = "<group>"; };
 		E8663CB15420516BF03D83C0 /* Pods_DSMKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DSMKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EFF7448E6222FD2999CDB1F2 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		EC2BCFECEE10EAE7B81698DD /* Pods-DSMKit_Example-DSMKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DSMKit_Example-DSMKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-DSMKit_Example-DSMKit_Tests/Pods-DSMKit_Example-DSMKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		EFF7448E6222FD2999CDB1F2 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +82,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E169C1F4202BD01200DCE2E5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -74,6 +97,7 @@
 			children = (
 				B2ACA0AE87D230C9B76C683F /* Pods_DSMKit_Example.framework */,
 				E8663CB15420516BF03D83C0 /* Pods_DSMKit_Tests.framework */,
+				C0E470F376CC1679EC505B1F /* Pods_DSMKit_Example_DSMKit_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -95,6 +119,7 @@
 			children = (
 				607FACD01AFB9204008FA782 /* DSMKit_Example.app */,
 				607FACE51AFB9204008FA782 /* DSMKit_Tests.xctest */,
+				E169C1FD202BD01200DCE2E5 /* DSMKit_Alamofire_Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -125,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				E169C1FF202BD12400DCE2E5 /* DSMKitAlamofireTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -134,6 +160,8 @@
 			isa = PBXGroup;
 			children = (
 				607FACEA1AFB9204008FA782 /* Info.plist */,
+				E169C1FE202BD01200DCE2E5 /* DSMKit_Alamofire_Tests-Info.plist */,
+				E1F294E82031191E0051C913 /* TheSwiftProgrammingLanguage(Swift4.1).epub */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -155,6 +183,8 @@
 				9E68ABD439B663C7BF0B933A /* Pods-DSMKit_Example.release.xcconfig */,
 				72DE06501F9B9BB5A321337D /* Pods-DSMKit_Tests.debug.xcconfig */,
 				D3D988A3B4C3A4F75D8E4C04 /* Pods-DSMKit_Tests.release.xcconfig */,
+				57613424F1A7C2326CCDD2BC /* Pods-DSMKit_Example-DSMKit_Tests.debug.xcconfig */,
+				EC2BCFECEE10EAE7B81698DD /* Pods-DSMKit_Example-DSMKit_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -203,6 +233,24 @@
 			productReference = 607FACE51AFB9204008FA782 /* DSMKit_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		E169C1EE202BD01200DCE2E5 /* DSMKit_Alamofire_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E169C1FA202BD01200DCE2E5 /* Build configuration list for PBXNativeTarget "DSMKit_Alamofire_Tests" */;
+			buildPhases = (
+				E169C1F2202BD01200DCE2E5 /* Sources */,
+				E169C1F4202BD01200DCE2E5 /* Frameworks */,
+				E169C1F7202BD01200DCE2E5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E169C1EF202BD01200DCE2E5 /* PBXTargetDependency */,
+			);
+			name = DSMKit_Alamofire_Tests;
+			productName = Tests;
+			productReference = E169C1FD202BD01200DCE2E5 /* DSMKit_Alamofire_Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -239,6 +287,7 @@
 			targets = (
 				607FACCF1AFB9204008FA782 /* DSMKit_Example */,
 				607FACE41AFB9204008FA782 /* DSMKit_Tests */,
+				E169C1EE202BD01200DCE2E5 /* DSMKit_Alamofire_Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,6 +307,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1F294E92031191E0051C913 /* TheSwiftProgrammingLanguage(Swift4.1).epub in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E169C1F7202BD01200DCE2E5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,9 +327,18 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-DSMKit_Example-DSMKit_Tests/Pods-DSMKit_Example-DSMKit_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/DSMKit/DSMKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Keys/Keys.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DSMKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Keys.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -319,11 +385,17 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-DSMKit_Example/Pods-DSMKit_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/DSMKit/DSMKit.framework",
+				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DSMKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -379,7 +451,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E169C201202BD68A00DCE2E5 /* DSMKitAlamofireTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E169C1F2202BD01200DCE2E5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +470,11 @@
 			isa = PBXTargetDependency;
 			target = 607FACCF1AFB9204008FA782 /* DSMKit_Example */;
 			targetProxy = 607FACE61AFB9204008FA782 /* PBXContainerItemProxy */;
+		};
+		E169C1EF202BD01200DCE2E5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 607FACCF1AFB9204008FA782 /* DSMKit_Example */;
+			targetProxy = E169C1F0202BD01200DCE2E5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -458,7 +543,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -504,7 +589,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -517,7 +602,10 @@
 			baseConfigurationReference = 60A5F942DE5E92576EE01A48 /* Pods-DSMKit_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = DSMKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -532,7 +620,10 @@
 			baseConfigurationReference = 9E68ABD439B663C7BF0B933A /* Pods-DSMKit_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = DSMKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -546,10 +637,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 72DE06501F9B9BB5A321337D /* Pods-DSMKit_Tests.debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -560,6 +650,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DSMKit_Example.app/DSMKit_Example";
 			};
 			name = Debug;
 		};
@@ -567,11 +658,49 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D3D988A3B4C3A4F75D8E4C04 /* Pods-DSMKit_Tests.release.xcconfig */;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DSMKit_Example.app/DSMKit_Example";
+			};
+			name = Release;
+		};
+		E169C1FB202BD01200DCE2E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Info.plist;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Tests/DSMKit_Alamofire_Tests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		E169C1FC202BD01200DCE2E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Tests/DSMKit_Alamofire_Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -606,6 +735,15 @@
 			buildConfigurations = (
 				607FACF31AFB9204008FA782 /* Debug */,
 				607FACF41AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E169C1FA202BD01200DCE2E5 /* Build configuration list for PBXNativeTarget "DSMKit_Alamofire_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E169C1FB202BD01200DCE2E5 /* Debug */,
+				E169C1FC202BD01200DCE2E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

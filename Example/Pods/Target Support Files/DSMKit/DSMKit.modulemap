@@ -1,0 +1,6 @@
+framework module DSMKit {
+  umbrella header "DSMKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
