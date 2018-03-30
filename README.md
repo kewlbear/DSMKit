@@ -2,7 +2,7 @@
 
 Swift library for Synology DSM APIs
 
-[![CI Status](http://img.shields.io/travis/Changbeom Ahn/DSMKit.svg?style=flat)](https://travis-ci.org/Changbeom Ahn/DSMKit)
+[![CI Status](http://img.shields.io/travis/kewlbear/DSMKit.svg?style=flat)](https://travis-ci.org/kewlbear/DSMKit)
 [![Version](https://img.shields.io/cocoapods/v/DSMKit.svg?style=flat)](http://cocoapods.org/pods/DSMKit)
 [![License](https://img.shields.io/cocoapods/l/DSMKit.svg?style=flat)](http://cocoapods.org/pods/DSMKit)
 [![Platform](https://img.shields.io/cocoapods/p/DSMKit.svg?style=flat)](http://cocoapods.org/pods/DSMKit)
