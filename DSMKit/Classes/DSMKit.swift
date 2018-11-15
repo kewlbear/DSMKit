@@ -183,6 +183,8 @@ open class DSM {
     
     let shouldQueryAPIInfo = true // TODO: ?
     
+    var pendingCompletion: ((Data?, URLResponse?, Swift.Error?) -> Void)?
+    
     func queryAPIInfo(completion: @escaping (Swift.Error?) -> Void) {
         get(API.Info.query()) { [weak self] (data, error) in
             guard let data = data else {
@@ -221,16 +223,25 @@ open class DSM {
         }
     }
     
-    lazy var urlSession = URLSession.shared
+    open lazy var urlSession = URLSession.shared
     
     open func get<T>(_ method: T, completion: @escaping (Data?, URLResponse?, Swift.Error?) -> Void) where T: RequestInfo {
         do {
             let url = try buildURL(info: method)
+
+            var task: URLSessionTask?
             
-            let task = urlSession.dataTask(with: url) { (data, response, error) in
-                completion(data, response, error)
+            if urlSession.delegate == nil {
+                task = urlSession.dataTask(with: url) { (data, response, error) in
+                    completion(data, response, error)
+                }
+            } else {
+                task = urlSession.dataTask(with: url)
+                assert(pendingCompletion == nil)
+                print("pending:", url)
+                pendingCompletion = completion
             }
-            task.resume()
+            task?.resume()
         }
         catch {
             if error as? Error == Error.apiInfoNotFound && shouldQueryAPIInfo {
@@ -247,6 +258,13 @@ open class DSM {
         }
     }
 
+    open func finish(data: Data?, response: URLResponse?, error: Swift.Error?) {
+        assert(pendingCompletion != nil)
+        pendingCompletion?(data, response, error)
+        print("reset pending")
+        pendingCompletion = nil
+    }
+    
     open func get<T>(_ method: T, completion: @escaping (T.DataType?, Swift.Error?) -> Void) where T: DecodableRequestInfo {
         get(method) { (data, response, error) in
             guard let data = data else {

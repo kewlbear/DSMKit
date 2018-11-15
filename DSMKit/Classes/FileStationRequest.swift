@@ -23,6 +23,23 @@
 /// All File Station APIs are required to login with SYNO.API.Auth and session=FileStation.
 public enum FileStation: Namespace {
     
+    public enum FileAdditional: String {
+        /// return a real path in volume
+        case real_path
+        /// return file byte size
+        case size
+        /// return information about file owner including user name, group name, UID and GID
+        case owner
+        /// return information about time including last access time, last modified time, last change time and create time
+        case time
+        /// return information about file permission
+        case perm
+        /// return a type of a virtual file system of a mount point
+        case mount_point_type
+        /// return a file extension
+        case type
+    }
+    
     public static let commonErrors = [
         400: "Invalid parameter of file operation",
         401: "Unknown error of file operation",
@@ -102,23 +119,6 @@ public enum FileStation: Namespace {
                     onlyWritable.map { encoder["onlywritable"] = $0 }
                     additional.map { encoder["additional"] = $0 }
                 }
-            }
-
-            public enum FileAdditional: String {
-                /// return a real path in volume
-                case real_path
-                /// return file byte size
-                case size
-                /// return information about file owner including user name, group name, UID and GID
-                case owner
-                /// return information about time including last access time, last modified time, last change time and create time
-                case time
-                /// return information about file permission
-                case perm
-                /// return a type of a virtual file system of a mount point
-                case mount_point_type
-                /// return a file extension
-                case type
             }
 
             /// Enumerate files in a given folder
@@ -233,6 +233,23 @@ public enum FileStation: Namespace {
             
     }
     
+    public enum Download: MethodContainer {
+        
+        public enum Mode: String {
+            case open
+            case download
+        }
+        
+        // TODO: ...
+        public static func download(path: String, mode: Mode) -> BasicRequestInfo<Data> {
+            return BasicRequestInfo<Data>(api: api, versions: 1...1) {
+                $0["path"] = path//, versions: 2...)
+                $0["mode"] = mode.rawValue
+            }
+        }
+
+    }
+
     public enum Sharing: MethodContainer {
         public static let errors = [
             2000: "Sharing link does not exist.",
@@ -252,6 +269,39 @@ public enum FileStation: Namespace {
         public static let errors = [
             1200: "Failed to rename it. More information in <errors> object."
         ]
+        
+        public struct Item {
+            /// path of a file/folder to be renamed
+            let path: String
+            
+            /// new name
+            let name: String
+            
+            public init(path: String, name: String) {
+                self.path = path
+                self.name = name
+            }
+        }
+
+        /// Rename a file/folder
+        /// - Parameters:
+        ///   - items: One or more items to be renamed.
+        ///   - additional: Additional requested file information. When an additional option is requested, responded objects will be provided in the specified additional option.
+        ///   - searchTaskId: A unique ID for the search task which is obtained from start method. It is used to update the renamed file in the search result.
+        public static func rename(items: [Item], additional: Set<FileAdditional>? = nil, searchTaskId: String? = nil) -> BasicRequestInfo<RenameData> {
+            return BasicRequestInfo<RenameData>(api: api, versions: 1...2) { encoder in
+                var paths = [String]()
+                var names = [String]()
+                for item in items {
+                    paths.append(item.path)
+                    names.append(item.name)
+                }
+                encoder["path"] = Values(values: paths)
+                encoder["name"] = Values(values: names)
+                additional.map { encoder["additional"] = $0 }
+                searchTaskId.map { encoder["search_taskid"] = $0 }
+            }
+        }
     }
     
     public enum CopyMove: MethodContainer {
@@ -270,6 +320,26 @@ public enum FileStation: Namespace {
         public static let errors = [
             900: "Failed to delete file(s)/folder(s). More information in <errors> object."
         ]
+        
+        // TODO: ...
+        public static func start(path: [String], accurateProgress: Bool? = nil, recursive: Bool? = nil, searchTaskId: String? = nil) -> BasicRequestInfo<String> {
+            assertionFailure()
+            return BasicRequestInfo<String>(api: api, versions: 1...1) { encoder in
+                encoder["path"] = path.joined()//, versions: 2...)
+                accurateProgress.map { encoder["accurate_progress"] = $0 }
+                recursive.map { encoder["recursive"] = $0 }
+                searchTaskId.map { encoder["search_taskid"] = $0 }
+            }
+        }
+
+        // TODO: ...
+        public static func status(taskId: String) -> BasicRequestInfo<String> {
+            assertionFailure()
+            return BasicRequestInfo<String>(api: api, versions: 1...1) {
+                $0["taskid"] = taskId//, versions: 2...)
+            }
+        }
+        
     }
     
     public enum Extract: MethodContainer {
@@ -658,4 +728,9 @@ public struct UploadData: Codable {
     public let file: String?
     public let pid: Int?
     public let progress: Int?
+}
+
+public struct RenameData: Codable {
+    /// Array of <file> objects.
+    public let files: [File]
 }

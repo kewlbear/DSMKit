@@ -63,6 +63,18 @@ class Tests: XCTestCase {
         share.map { get(FileStation.List.list(folderPath: $0.path, offset: 1, limit: 2, sortBy: .crtime, sortDirection: .asc, pattern: " ", fileType: .dir, gotoPath: "xxx", additional: [.time])) }
     }
     
+    func testRename() {
+        typealias Item = FileStation.Rename.Item
+        let directory = "/Test"
+        let items = [
+            Item(path: "\(directory)/aa", name: "a,a"),
+            Item(path: "\(directory)/b,b", name: "bb"),
+        ]
+        get(FileStation.Rename.rename(items: items)) { (data, error) in
+            print(data ?? "no data", error ?? "no error")
+        }
+    }
+    
     func get<T>(_ info: T?, completion: ((T.DataType?, Error?) -> Void)? = nil) where T: DecodableRequestInfo {
         let done = expectation(description: "done")
         info.map {
