@@ -321,25 +321,22 @@ public enum FileStation: Namespace {
             900: "Failed to delete file(s)/folder(s). More information in <errors> object."
         ]
         
-        // TODO: ...
-        public static func start(path: [String], accurateProgress: Bool? = nil, recursive: Bool? = nil, searchTaskId: String? = nil) -> BasicRequestInfo<String> {
-            assertionFailure()
-            return BasicRequestInfo<String>(api: api, versions: 1...1) { encoder in
-                encoder["path"] = path.joined()//, versions: 2...)
+        public static func start(path: [String], accurateProgress: Bool? = nil, recursive: Bool? = nil, searchTaskId: String? = nil) -> BasicRequestInfo<DeleteData> {
+            return BasicRequestInfo<DeleteData>(api: api, versions: 1...1) { encoder in
+                encoder["path"] = Values(values: path) //, versions: 2...)
                 accurateProgress.map { encoder["accurate_progress"] = $0 }
                 recursive.map { encoder["recursive"] = $0 }
                 searchTaskId.map { encoder["search_taskid"] = $0 }
             }
         }
 
-        // TODO: ...
-        public static func status(taskId: String) -> BasicRequestInfo<String> {
-            assertionFailure()
-            return BasicRequestInfo<String>(api: api, versions: 1...1) {
+        public static func status(taskId: String) -> BasicRequestInfo<DeleteStatusData> {
+            return BasicRequestInfo<DeleteStatusData>(api: api, versions: 1...1) {
                 $0["taskid"] = taskId//, versions: 2...)
             }
         }
         
+        // TODO: stop(), delete()
     }
     
     public enum Extract: MethodContainer {

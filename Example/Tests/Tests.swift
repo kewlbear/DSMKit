@@ -27,6 +27,8 @@ import DSMKit_Example
 
 class Tests: XCTestCase {
     
+    let directory = "/Test"
+
     lazy var profile = Profile.main ?? Profile.environment[0]
 
     override func setUp() {
@@ -65,13 +67,32 @@ class Tests: XCTestCase {
     
     func testRename() {
         typealias Item = FileStation.Rename.Item
-        let directory = "/Test"
         let items = [
             Item(path: "\(directory)/aa", name: "a,a"),
             Item(path: "\(directory)/b,b", name: "bb"),
         ]
         get(FileStation.Rename.rename(items: items)) { (data, error) in
             print(data ?? "no data", error ?? "no error")
+        }
+    }
+    
+    func testDelete() {
+        let paths = [
+            "\(directory)/bb.mkv",
+            "\(directory)/bb.smi"
+        ]
+        var taskId: String?
+        get(FileStation.Delete.start(path: paths)) { data, error in
+            print(data?.taskId ?? "no data", error ?? "no error")
+            XCTAssertNotNil(data)
+            XCTAssertNil(error)
+            
+            taskId = data?.taskId
+        }
+        get(FileStation.Delete.status(taskId: taskId ?? "nil")) { data, error in
+            print(data ?? "no data", error ?? "no error")
+            XCTAssertNotNil(data)
+            XCTAssertNil(error)
         }
     }
     
