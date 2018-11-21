@@ -65,12 +65,23 @@ class Tests: XCTestCase {
         share.map { get(FileStation.List.list(folderPath: $0.path, offset: 1, limit: 2, sortBy: .crtime, sortDirection: .asc, pattern: " ", fileType: .dir, gotoPath: "xxx", additional: [.time])) }
     }
     
+    func testCreateFolder() {
+        typealias Item = FileStation.CreateFolder.Item
+        let items = [
+            Item(folderPath: "\(directory)/aa", name: "a,a"),
+            Item(folderPath: "\(directory)/b,b", name: "bb"),
+        ]
+        get(FileStation.CreateFolder.create(items: items)) { (data, error) in
+            print(data ?? "no data", error ?? "no error")
+        }
+    }
+    
     func testRename() {
         typealias Item = FileStation.Rename.Item
         let items = [
             Item(path: "\(directory)/aa", name: "a,a"),
             Item(path: "\(directory)/b,b", name: "bb"),
-        ]
+            ]
         get(FileStation.Rename.rename(items: items)) { (data, error) in
             print(data ?? "no data", error ?? "no error")
         }

@@ -263,6 +263,31 @@ public enum FileStation: Namespace {
             1100: "Failed to create a folder. More information in <errors> object.",
             1101: "The number of folders to the parent folder would exceed the system limitation."
         ]
+        
+        public struct Item {
+            let folderPath: String
+            let name: String
+            
+            public init(folderPath: String, name: String) {
+                self.folderPath = folderPath
+                self.name = name
+            }
+        }
+        
+        public static func create(items: [Item], forceParent: Bool? = nil, additional: Set<FileAdditional>? = nil) -> BasicRequestInfo<CreateFolderData> {
+            return BasicRequestInfo<CreateFolderData>(api: api, versions: 1...2) { encoder in
+                var paths = [String]()
+                var names = [String]()
+                for item in items {
+                    paths.append(item.folderPath)
+                    names.append(item.name)
+                }
+                encoder["folder_path"] = Values(values: paths)
+                encoder["name"] = Values(values: names)
+                forceParent.map { encoder["force_parent"] = $0 }
+                additional.map { encoder["additional"] = $0 }
+            }
+        }
     }
     
     public enum Rename: MethodContainer {
@@ -783,4 +808,9 @@ public struct UploadData: Codable {
 public struct RenameData: Codable {
     /// Array of <file> objects.
     public let files: [File]
+}
+
+public struct CreateFolderData: Codable {
+    /// Array of <file> objects.
+    public let folders: [File]
 }
