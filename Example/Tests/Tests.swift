@@ -27,7 +27,7 @@ import DSMKit_Example
 
 class Tests: XCTestCase {
     
-    let directory = "/Test"
+    let directory = "/Development/안창범"
 
     lazy var profile = Profile.main ?? Profile.environment[0]
 
@@ -73,6 +73,27 @@ class Tests: XCTestCase {
         ]
         get(FileStation.Rename.rename(items: items)) { (data, error) in
             print(data ?? "no data", error ?? "no error")
+        }
+    }
+    
+    func testCopyMove() {
+        let paths = [
+            "\(directory)/iostabonbooks.zip",
+            "\(directory)/reflow_html"
+        ]
+        let to = "\(directory)/co,py"
+        var taskId: String?
+        get(FileStation.CopyMove.start(path: paths, destFolderPath: to)) { data, error in
+            print(data?.taskId ?? "no data", error ?? "no error")
+            XCTAssertNotNil(data)
+            XCTAssertNil(error)
+            
+            taskId = data?.taskId
+        }
+        get(FileStation.CopyMove.status(taskId: taskId ?? "nil")) { data, error in
+            print(data ?? "no data", error ?? "no error")
+            XCTAssertNotNil(data)
+            XCTAssertNil(error)
         }
     }
     

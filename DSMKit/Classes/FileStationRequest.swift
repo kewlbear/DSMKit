@@ -314,6 +314,25 @@ public enum FileStation: Namespace {
             1006: "Cannot copy/move file/folder with special characters to a FAT32 file system.",
             1007: "Cannot copy/move a file bigger than 4G to a FAT32 file system."
         ]
+        
+        public static func start(path: [String], destFolderPath: String, overwrite: Bool? = nil, removeSrc: Bool? = nil, accurateProgress: Bool? = nil, searchTaskId: String? = nil) -> BasicRequestInfo<CopyMoveData> {
+            return BasicRequestInfo<CopyMoveData>(api: api, versions: 1...1) { encoder in
+                encoder["path"] = Values(values: path) //, versions: 2...)
+                encoder["dest_folder_path"] = Path(path: destFolderPath)
+                overwrite.map { encoder["overwrite"] = $0 }
+                removeSrc.map { encoder["remove_src"] = $0 }
+                accurateProgress.map { encoder["accurate_progress"] = $0 }
+                searchTaskId.map { encoder["search_taskid"] = $0 }
+            }
+        }
+        
+        public static func status(taskId: String) -> BasicRequestInfo<CopyMoveStatusData> {
+            return BasicRequestInfo<CopyMoveStatusData>(api: api, versions: 1...1) {
+                $0["taskid"] = taskId//, versions: 2...)
+            }
+        }
+        
+        // TODO: stop()
     }
     
     public enum Delete: MethodContainer {
@@ -603,6 +622,40 @@ public struct ACL: Codable {
     /// If a logged-in user has a privilege to write data or create files within this folder or not.
     public let write: Bool
     
+}
+
+public struct CopyMoveData: Codable {
+    public let taskId: String
+    
+    enum CodingKeys: String, CodingKey {
+        case taskId = "taskid"
+    }
+}
+
+public struct CopyMoveStatusData: Codable {
+    public let processedSize: Int?
+    public let total: Int?
+    public let path: String?
+    public let finished: Bool
+    public let progress: Double?
+    public let destFolderPath: String
+
+    public struct Error: Codable {
+        public let code: Int
+        public let path: String
+    }
+    
+    public let errors: [Error]?
+
+    enum CodingKeys: String, CodingKey {
+        case processedSize = "processed_size"
+        case total
+        case path
+        case finished
+        case progress
+        case destFolderPath = "dest_folder_path"
+        case errors
+    }
 }
 
 public struct DeleteData: Codable {
