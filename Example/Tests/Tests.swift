@@ -89,8 +89,8 @@ class Tests: XCTestCase {
     
     func testCopyMove() {
         let paths = [
-            "\(directory)/iostabonbooks.zip",
-            "\(directory)/reflow_html"
+            "\(directory)/x.zip",
+            "\(directory)/folder"
         ]
         let to = "\(directory)/co,py"
         var taskId: String?

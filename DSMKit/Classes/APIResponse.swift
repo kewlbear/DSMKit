@@ -59,10 +59,6 @@ extension Response.Error: Error {
 
 public func decode<T>(data: Data) throws -> T? where T: Decodable {
     let response = try JSONDecoder().decode(Response<T>.self, from: data)
-    print("<"//,
-//          response,
-//          response.data ?? "no data?"
-    )
     if response.success {
         return response.data
     } else {

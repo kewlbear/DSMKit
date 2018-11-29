@@ -46,7 +46,9 @@ protocol Renamed {
 }
 
 public protocol Value {
-    func value(version: Version) -> String
+    func stringValue(version: Version) -> String
+    
+    func value(version: Version) -> Self?
 }
 
 protocol UnversionedValue: Value {
@@ -54,8 +56,12 @@ protocol UnversionedValue: Value {
 }
 
 extension UnversionedValue {
-    public func value(version: Version) -> String {
+    public func stringValue(version: Version) -> String {
         return String(describing: self)
+    }
+    
+    public func value(version: Version) -> Self? {
+        return self
     }
 }
 
@@ -72,14 +78,22 @@ extension Bool: UnversionedValue {
 }
 
 extension Set: Value {
-    public func value(version: Int) -> String {
-        return map { ($0 as? Value)?.value(version: version) ?? "\($0)" }.joined(separator: ",")
+    public func stringValue(version: Int) -> String {
+        return map { ($0 as? Value)?.stringValue(version: version) ?? "\($0)" }.joined(separator: ",")
+    }
+    
+    public func value(version: Version) -> Set<Element>? {
+        return self
     }
 }
 
 extension RawRepresentable where RawValue: Value {
-    public func value(version: Int) -> String {
-        return rawValue.value(version: version)
+    public func stringValue(version: Int) -> String {
+        return rawValue.stringValue(version: version)
+    }
+    
+    public func value(version: Version) -> Self? {
+        return self
     }
 }
 
@@ -89,21 +103,29 @@ let dateFormatter: NumberFormatter = {
     return formatter
 }()
 
-extension Date: Value {
-    public func value(version: Int) -> String {
+extension Date: UnversionedValue {
+    public func stringValue(version: Int) -> String {
         let milliseconds = timeIntervalSince1970 * 1000
         return dateFormatter.string(from: NSNumber(value: milliseconds)) ?? "invalid number?"
     }
 }
 
-extension URL: Value {
-    public func value(version: Int) -> String {
+extension URL: UnversionedValue {
+    public func stringValue(version: Int) -> String {
         return lastPathComponent
     }
 }
 
-struct BasicValue<T>: Value where T: Value {
+struct BasicValue<T>: Value, CustomStringConvertible where T: Value {
+    func value(version: Version) -> BasicValue<T>? {
+        return values.first { $0.1.contains(version) }.map { BasicValue($0.0) }
+    }
+    
     let values: [(T, Availability)]
+    
+    var description: String {
+        return values.first.map { "\($0.0)" } ?? "no value?"
+    }
     
     init(_ value: T, availability: Availability = 1..., previousValues: [(T, Availability)]? = nil) {
         var values = previousValues ?? []
@@ -111,15 +133,19 @@ struct BasicValue<T>: Value where T: Value {
         self.values = values
     }
     
-    func value(version: Version) -> String {
-        return values.first { $0.1.contains(version) }.map { $0.0.value(version: version) } ?? "no matching value"
+    func stringValue(version: Version) -> String {
+        return values.first { $0.1.contains(version) }.map { $0.0.stringValue(version: version) } ?? "no matching value"
     }
 }
 
 struct Path: Value {
+    func value(version: Version) -> Path? {
+        return self
+    }
+    
     let path: String // TODO: BasicValue?
     
-    func value(version: Version) -> String {
+    func stringValue(version: Version) -> String {
         let escaped = escape(path)
         return version > 1 && false ? "\"\(escaped)\"" : escaped
     }
@@ -131,9 +157,13 @@ func escape(_ string: String) -> String {
 }
 
 struct Values: Value {
+    func value(version: Version) -> Values? {
+        return self
+    }
+    
     let values: [String]
     
-    func value(version: Int) -> String {
+    func stringValue(version: Int) -> String {
         return values.map { escape($0) }.joined(separator: ",")
     }
 }
@@ -181,11 +211,12 @@ open class DSM {
     
     var apiInfo = ["SYNO.API.Info": APIInfo(path: "query.cgi", minVersion: 1, maxVersion: 1)]
     
-    let shouldQueryAPIInfo = true // TODO: ?
+    var shouldQueryAPIInfo = true // TODO: ?
     
     var pendingCompletion: ((Data?, URLResponse?, Swift.Error?) -> Void)?
     
     func queryAPIInfo(completion: @escaping (Swift.Error?) -> Void) {
+        shouldQueryAPIInfo = false
         get(API.Info.query()) { [weak self] (data, error) in
             guard let data = data else {
                 completion(error)
@@ -210,15 +241,34 @@ open class DSM {
     class ParameterEncoder: Encoding {
         let version: Version
         
-        var queryItems = [URLQueryItem]()
+        var parameterStore: ParameterStore
         
-        init(version: Version) {
+        init(version: Version, parameterStore: ParameterStore = URLQueryItems()) {
             self.version = version
+            self.parameterStore = parameterStore
         }
         
         func add(parameter: Value, value: Value, availability: Availability) {
             if availability.contains(version) {
-                queryItems.append(URLQueryItem(name: parameter.value(version: version), value: value.value(version: version)))
+                struct V: ParameterValue {
+                    let v: Value
+                    let version: Version
+                    
+                    var string: String {
+                        return v.stringValue(version: version)
+                    }
+                    
+                    var value: Value {
+                        return v
+                    }
+                }
+
+                guard let v = value.value(version: version) else {
+                    assertionFailure()
+                    return
+                }
+                parameterStore.add(name: parameter.stringValue(version: version), value:
+                    V(v: v, version: version))
             }
         }
     }
@@ -241,6 +291,7 @@ open class DSM {
                 print("pending:", url)
                 pendingCompletion = completion
             }
+            print(">", url)
             task?.resume()
         }
         catch {
@@ -267,6 +318,7 @@ open class DSM {
     
     open func get<T>(_ method: T, completion: @escaping (T.DataType?, Swift.Error?) -> Void) where T: DecodableRequestInfo {
         get(method) { (data, response, error) in
+            print("<", method.api)
             guard let data = data else {
                 completion(nil, error)
                 return
@@ -308,6 +360,15 @@ extension DSM: URLBuilder {
             api.supportedVersion.overlaps(info.versions),
             var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else
         {
+            if shouldQueryAPIInfo {
+                let group = DispatchGroup()
+                group.enter()
+                queryAPIInfo { (error) in
+                    group.leave()
+                }
+                group.wait()
+                return try buildURL(info: info)
+            }
             throw apiInfo.keys.contains(info.api) ? Error.unsupportedVersion : Error.apiInfoNotFound
         }
         
@@ -318,7 +379,7 @@ extension DSM: URLBuilder {
         
         urlComponents.dsm_apiPath = api.path
         
-        urlComponents.queryItems = encoder.queryItems
+        urlComponents.queryItems = (encoder.parameterStore as? URLQueryItems)?.queryItems
         
         urlComponents.dsm_addQueryItems(api: info.api, version: version, sessionId: sessionId)
         
@@ -327,9 +388,39 @@ extension DSM: URLBuilder {
         guard let url = urlComponents.url else {
             throw Error.invalidURL
         }
-        print(">", url)
         return url
     }
+}
+
+extension DSM: MultipartFormDataBuilder {
+
+    public func buildMultipartFormData<T>(info: T, to store: ParameterStore) throws where T : RequestInfo {
+        guard let api = apiInfo[info.api],
+            api.supportedVersion.overlaps(info.versions) else
+        {
+            if shouldQueryAPIInfo {
+                let group = DispatchGroup()
+                group.enter()
+                queryAPIInfo { (error) in
+                    group.leave()
+                }
+                group.wait()
+                try buildMultipartFormData(info: info, to: store)
+                return
+            }
+            throw apiInfo.keys.contains(info.api) ? Error.unsupportedVersion : Error.apiInfoNotFound
+        }
+        
+        let version = info.versions.clamped(to: api.supportedVersion).upperBound
+
+        let encoder = ParameterEncoder(version: version, parameterStore: store)
+        
+        encoder["api"] = info.api
+        encoder["version"] = version
+        
+        info.encode(encoder: encoder)
+    }
+    
 }
 
 /// The type (usually an `enum`) conforming to this protocol is used as a namespace,
@@ -372,6 +463,32 @@ extension Encoding {
 
 }
 
+public protocol ParameterValue {
+    
+    associatedtype ValueType
+    
+    var string: String { get }
+    
+    var value: ValueType { get }
+    
+}
+
+public protocol ParameterStore {
+    
+    mutating func add<T>(name: String, value: T) where T: ParameterValue
+    
+}
+
+public struct URLQueryItems: ParameterStore {
+    
+    var queryItems = [URLQueryItem]()
+    
+    public mutating func add<T>(name: String, value: T) where T: ParameterValue {
+        queryItems.append(URLQueryItem(name: name, value: value.string))
+    }
+    
+}
+
 public protocol RequestInfo {
     
     var api: String { get }
@@ -393,6 +510,12 @@ extension RequestInfo {
 public protocol URLBuilder {
     
     func buildURL<T>(info: T) throws -> URL where T: RequestInfo
+    
+}
+
+public protocol MultipartFormDataBuilder {
+    
+    func buildMultipartFormData<T>(info: T, to: ParameterStore) throws where T: RequestInfo
     
 }
 

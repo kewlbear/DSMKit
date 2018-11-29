@@ -40,134 +40,86 @@ class AlamofireTests: XCTestCase {
     }
     
     func testUpload() {
-//        class AlamofireMultipartHandler: RequestHandler {
-//
-//            struct Builder: RequestBuilder {
-//                let multipartFormData: MultipartFormData
-//
-//                let version: Int
-//
-//                func add<T>(parameter: String, value: Value, versions: T) where T: RangeExpression, T.Bound == Int {
-//                    guard versions.contains(version) else {
-//                        // TODO: fail?
-//                        print(#function, "skipping", parameter, ": doesn't support version", version, "; supports", versions)
-//                        return
-//                    }
-//                    // TODO: ...
-//                    value.value(version: version).data(using: .utf8).map {
-//                        if let url = value as? URL {
-//                            multipartFormData.append(url, withName: parameter)
-//                        } else {
-//                            multipartFormData.append($0, withName: parameter)
-//                        }
-//                    }
-//                }
-//            }
-//
-//            let dsm: D
-//
-//            init(dsm: D) {
-//                self.dsm = dsm
-//                super.init()
-//            }
-//
-//            override func withRequestBuilder<T>(api: String, method: String = #function, version: ClosedRange<Int>, _ completion: @escaping (T?, Error?) -> Void, _ apply: @escaping (RequestBuilder) throws -> Void) where T : Decodable {
-//
-//                guard let info = dsm.info(for: api),
-//                    info.supportedVersion.overlaps(version),
-//                    var urlComponents = URLComponents(url: dsm.url, resolvingAgainstBaseURL: false) else
-//                {
-//                    // TODO: ...
-//                    completion(nil, DSM.Error.todo)
-//                    return
-//                }
-//                urlComponents.dsm_apiPath = info.path
-//                guard let url = urlComponents.url else {
-//                    completion(nil, DSM.Error.todo)
-//                    return
-//                }
-//                print(">", url)
-//                Alamofire.upload(
-//                    multipartFormData: { multipartFormData in
-//                        let builder = Builder(multipartFormData: multipartFormData, version: version.clamped(to: info.supportedVersion).upperBound)
-//                        builder.add(parameter: "api", value: api)
-//                        builder.add(parameter: "method", value: method.components(separatedBy: "(").first ?? "no method name??")
-//                        builder.add(parameter: "version", value: builder.version)
-//                        do {
-//                            try apply(builder)
-//                        }
-//                        catch {
-//                            print(error)
-//                        }
-//                        //                multipartFormData.append(unicornImageURL, withName: "unicorn")
-//                        //                multipartFormData.append(rainbowImageURL, withName: "rainbow")
-//                    },
-//                    to: url,
-//                    encodingCompletion: { encodingResult in
-//                        switch encodingResult {
-//                        case .success(let upload, _, _):
-//                            upload.responseData {
-//                                guard let data = $0.data else {
-//                                    completion(nil, DSM.Error.todo)
-//                                    return
-//                                }
-//                                do {
-//                                    let response = try JSONDecoder().decode(Response<T>.self, from: data)
-//                                    print("<", response)
-//                                    if response.success {
-//                                        completion(response.data, nil)
-//                                    } else {
-//                                        let error = response.error
-//                                        print(error.map {
-//                                            FileStation.errors[$0.code] ?? API.commonErrors[$0.code] ?? "unknown error"
-//                                        } ?? "nil?", error ?? "no error?")
-//                                        completion(nil, error)
-//                                    }
-//                                }
-//                                catch {
-//                                    print("<", error, String(data: data, encoding: .utf8) ?? "not utf8?")
-//                                    completion(nil, error)
-//                                }
-//                            }
-//                        case .failure(let encodingError):
-//                            print(encodingError)
-//                        }
-//                    }
-//                    )
-//
-//            }
-//
-//        }
-        
-        var profile = Profile.environment.first
-        guard let dsm = profile?.dsm else {
+        guard var profile = Profile.main ?? Profile.environment.first else {
             XCTFail()
             return
         }
+        let dsm = profile.dsm
         let query = expectation(description: "query")
-        let request = API.Info.query()
+        let request = API.Auth.login(account: profile.account, password: profile.password, session: "dsmalamo", format: .cookie)
         do {
+            print("> login")
             Alamofire.request(try request.url(builder: dsm))
                 .responseData {
-                    defer { query.fulfill() }
+                    print($0)
+                    defer {
+                        query.fulfill()
+                    }
                     guard let data = $0.data else {
                         // TODO: ...
                         print($0.error ?? "no error??")
                         return
                     }
                     do {
-                        let _: APIInfoData? = try decode(data: data)
+                        let _: APILoginData? = try decode(data: data)
                     }
                     catch {
                         XCTFail(error.localizedDescription)
                     }
             }
+            wait(for: [query], timeout: 100)
+
+            let finish = expectation(description: "finish")
+            let path = "/Development/안창범/aa"
+            let file = Bundle(for: type(of: self)).url(forResource: "TheSwiftProgrammingLanguage(Swift4.1)", withExtension: "epub") ?? URL(fileURLWithPath: "error")
+            let upload = FileStation.Upload.upload(path: path, createParents: false, file: file)
+            var components = URLComponents(url: try upload.url(builder: dsm), resolvingAgainstBaseURL: false)
+            components?.query = nil
+            let url = components?.url ?? URL(fileURLWithPath: "")
+            print("> upload")
+            Alamofire.upload(
+                multipartFormData: { multipartFormData in
+                    try? dsm.buildMultipartFormData(info: upload, to: multipartFormData)
+            },
+                to: url,
+                encodingCompletion: { encodingResult in
+                    print("encoding result", encodingResult)
+                    switch encodingResult {
+                    case .success(let upload, _, _):
+                        upload.responseData {
+                            print("upload response", $0)
+                            guard let data = $0.data else {
+                                XCTFail()
+                                return
+                            }
+//                            do {
+//                                let response = try JSONDecoder().decode(Response<T>.self, from: data)
+//                                print("<", response)
+//                                if !response.success {
+//                                    let error = response.error
+//                                    print(error ?? "no error?")
+//                                    XCTFail()
+//                                }
+//                            }
+//                            catch {
+                                print("<upload",
+//                                      error,
+                                      String(data: data, encoding: .utf8) ?? "not utf8?")
+//                                XCTFail()
+//                            }
+                            finish.fulfill()
+                        }
+                    case .failure(let encodingError):
+                        print("encoding error", encodingError)
+                        XCTFail()
+                        finish.fulfill()
+                    }
+            }
+            )
+            wait(for: [finish], timeout: 100)
         }
         catch {
             XCTFail(error.localizedDescription)
-        }
-        struct X {
-            
         }
 //        dsm.fileStation.copyMove.start() { _,_ in // TODO: ugly trick to update apiInfo
 //            dsm.multiPartHandler = AlamofireMultipartHandler(dsm: dsm)
@@ -180,7 +132,22 @@ class AlamofireTests: XCTestCase {
 ////                }
 //            }
 //        }
-        wait(for: [query], timeout: 100)
     }
     
+}
+
+extension MultipartFormData: ParameterStore {
+    public func add<T>(name: String, value: T) where T : ParameterValue {
+        if let url = value.value as? URL {
+            print(name, url)
+            append(url, withName: name, fileName: url.lastPathComponent, mimeType: "application/octet-stream")
+        } else {
+            guard let data = value.string.data(using: .utf8) else {
+                assertionFailure()
+                return
+            }
+            print(name, value.string)
+            append(data, withName: name)
+        }
+    }
 }
