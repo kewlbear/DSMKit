@@ -272,6 +272,12 @@ public enum FileStation: Namespace {
                 self.folderPath = folderPath
                 self.name = name
             }
+            
+            public init(url: URL) {
+                folderPath = url.deletingLastPathComponent().path
+                    .precomposedStringWithCanonicalMapping
+                name = url.lastPathComponent.precomposedStringWithCanonicalMapping
+            }
         }
         
         public static func create(items: [Item], forceParent: Bool? = nil, additional: Set<FileAdditional>? = nil) -> BasicRequestInfo<CreateFolderData> {
