@@ -219,6 +219,7 @@ open class DSM {
         shouldQueryAPIInfo = false
         get(API.Info.query()) { [weak self] (data, error) in
             guard let data = data else {
+                self?.shouldQueryAPIInfo = true
                 completion(error)
                 return
             }
@@ -234,6 +235,7 @@ open class DSM {
         case unsupportedVersion
         case invalidResponse
         case invalidURL
+        case noSessionId
         
         static let domain = "error"
     }
@@ -363,10 +365,13 @@ extension DSM: URLBuilder {
             if shouldQueryAPIInfo {
                 let group = DispatchGroup()
                 group.enter()
+                var _error: Swift.Error?
                 queryAPIInfo { (error) in
+                    _error = error
                     group.leave()
                 }
                 group.wait()
+                if let error = _error { throw error }
                 return try buildURL(info: info)
             }
             throw apiInfo.keys.contains(info.api) ? Error.unsupportedVersion : Error.apiInfoNotFound
@@ -395,6 +400,9 @@ extension DSM: URLBuilder {
 extension DSM: MultipartFormDataBuilder {
 
     public func buildMultipartFormData<T>(info: T, to store: ParameterStore) throws where T : RequestInfo {
+        guard let sessionId = sessionId else {
+            throw Error.noSessionId
+        }
         guard let api = apiInfo[info.api],
             api.supportedVersion.overlaps(info.versions) else
         {
@@ -417,7 +425,7 @@ extension DSM: MultipartFormDataBuilder {
         
         encoder["api"] = info.api
         encoder["version"] = version
-        
+        encoder["_sid"] = sessionId
         info.encode(encoder: encoder)
     }
     

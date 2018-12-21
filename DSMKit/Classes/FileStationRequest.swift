@@ -202,12 +202,15 @@ public enum FileStation: Namespace {
     public enum Upload: MethodContainer {
         
         public static func upload(path: String, createParents: Bool, overwrite: Bool? = nil, mtime: Date? = nil, crtime: Date? = nil, atime: Date? = nil, file: URL) -> BasicRequestInfo<UploadData> {
-            return BasicRequestInfo<UploadData>(api: api, versions: 1...2) {
+            return BasicRequestInfo<UploadData>(api: api, versions: 1...2) { encoder in
                 let kPath = BasicValue("path", availability: 2..., previousValues: [("dest_folder_path", 1...)])
-                $0[kPath] = path//, versions: 1...1)
-                $0["create_parents"] = createParents
-                // TODO: ...
-                $0["file"] = file
+                encoder[kPath] = path//, versions: 1...1)
+                encoder["create_parents"] = createParents
+                overwrite.map { encoder["overwrite"] = $0 }
+                mtime.map { encoder["mtime"] = $0 }
+                crtime.map { encoder["crtime"] = $0 }
+                atime.map { encoder["atime"] = $0 }
+                encoder["file"] = file
             }
         }
         
