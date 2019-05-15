@@ -27,6 +27,11 @@ enum ParameterName: String {
     case sessionId = "_sid"
 }
 
+// FIXME: rename
+public protocol ErrorInfo {
+    associatedtype ErrorType: DSMError
+}
+
 public protocol Method {
     
     associatedtype Data: Decodable
@@ -191,13 +196,14 @@ struct Parameter {
     }
 }
 
+// FIXME: correct implementation
 extension Parameter: Hashable {
     static func ==(lhs: Parameter, rhs: Parameter) -> Bool {
         return lhs.versions.first?.0 == rhs.versions.first?.0
     }
     
-    var hashValue: Int {
-        return (versions.first?.0 ?? "no version?").hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(versions.first?.0)
     }
 }
 
@@ -319,19 +325,30 @@ open class DSM {
     }
     
     open func get<T>(_ method: T, completion: @escaping (T.DataType?, Swift.Error?) -> Void) where T: DecodableRequestInfo {
+        get(method) {
+            switch $0 {
+            case .success(let success):
+                completion(success, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+    
+    open func get<T>(_ method: T, completion: @escaping (Result<T.DataType, Swift.Error>) -> Void) where T: DecodableRequestInfo {
         get(method) { (data, response, error) in
             print("<", method.api)
             guard let data = data else {
-                completion(nil, error)
+//                print(error ?? response ?? "no response?")
+                completion(.failure(error ?? Error.invalidResponse))
                 return
             }
-            do {
-                completion(try decode(data: data), nil)
-            }
-            catch {
-                print(#function, String(data: data, encoding: .utf8) ?? "not utf8?")
-                completion(nil, error)
-            }
+            let result: Result<T.DataType, Swift.Error>
+                = Result(catching: { try decode(data: data) })
+//            if case let .failure(error) = result {
+//                print(#function, error, (error as? CustomNSError)?.errorUserInfo ?? [:], String(data: data, encoding: .utf8) ?? "not utf8?")
+//            }
+            completion(result)
         }
     }
     
@@ -529,7 +546,7 @@ public protocol MultipartFormDataBuilder {
 
 public protocol DecodableRequestInfo: RequestInfo {
     
-    associatedtype DataType: Decodable
+    associatedtype DataType: Decodable & ErrorInfo
     
 }
 
@@ -558,7 +575,7 @@ public class VanillaRequestInfo: RequestInfo {
 
 }
 
-public class BasicRequestInfo<T>: VanillaRequestInfo, DecodableRequestInfo where T: Decodable {
+public class BasicRequestInfo<T>: VanillaRequestInfo, DecodableRequestInfo where T: Decodable & ErrorInfo {
     
     public typealias DataType = T
     

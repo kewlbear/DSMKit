@@ -511,7 +511,13 @@ extension FileStationInfoData: Decodable {
     }
 }
 
-public struct FileList: Codable {
+extension FileStationInfoData: ErrorInfo {
+    public typealias ErrorType = FileStationError
+}
+
+public struct FileList: Codable, ErrorInfo {
+    public typealias ErrorType = FileStationError
+    
     /// Total number of files.
     public let total: Int
     
@@ -522,7 +528,9 @@ public struct FileList: Codable {
     public let files: [File]
 }
 
-public struct ShareList: Codable {
+public struct ShareList: Codable, ErrorInfo {
+    public typealias ErrorType = FileStationError
+    
     /// Total number of shared folders.
     public let total: Int
     
@@ -658,7 +666,9 @@ public struct ACL: Codable {
     
 }
 
-public struct CopyMoveData: Codable {
+public struct CopyMoveData: Codable, ErrorInfo {
+    public typealias ErrorType = CopyMoveError
+    
     public let taskId: String
     
     enum CodingKeys: String, CodingKey {
@@ -666,7 +676,9 @@ public struct CopyMoveData: Codable {
     }
 }
 
-public struct CopyMoveStatusData: Codable {
+public struct CopyMoveStatusData: Codable, ErrorInfo {
+    public typealias ErrorType = CopyMoveError
+    
     public let processedSize: Int?
     public let total: Int?
     public let path: String?
@@ -692,7 +704,9 @@ public struct CopyMoveStatusData: Codable {
     }
 }
 
-public struct DeleteData: Codable {
+public struct DeleteData: Codable, ErrorInfo {
+    public typealias ErrorType = FileStationError
+    
     public let taskId: String
     
     enum CodingKeys: String, CodingKey {
@@ -700,7 +714,9 @@ public struct DeleteData: Codable {
     }
 }
 
-public struct DeleteStatusData: Codable {
+public struct DeleteStatusData: Codable, ErrorInfo {
+    public typealias ErrorType = FileStationError
+    
     public let processedCount: Int
     public let total: Int
     public let path: String
@@ -807,19 +823,30 @@ public struct Time: Codable {
 }
 
 /// No specific response. It returns an empty success response if completed without error.
-public struct UploadData: Codable {
+public struct UploadData: Codable, ErrorInfo {
+    public typealias ErrorType = UploadError
+    
     public let blSkip: Bool?
     public let file: String?
     public let pid: Int?
     public let progress: Int?
 }
 
-public struct RenameData: Codable {
+public struct RenameData: Codable, ErrorInfo {
+    public typealias ErrorType = RenameError
+    
     /// Array of <file> objects.
     public let files: [File]
 }
 
-public struct CreateFolderData: Codable {
+public struct CreateFolderData: Codable, ErrorInfo {
+    public typealias ErrorType = CreateFolderError
+    
     /// Array of <file> objects.
     public let folders: [File]
+}
+
+// FIXME: ugly
+extension Data: ErrorInfo {
+    public typealias ErrorType = FileStationError
 }

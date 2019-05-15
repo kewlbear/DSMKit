@@ -20,6 +20,28 @@
 //  THE SOFTWARE.
 //
 
+public struct FileErrorDetail: Codable {
+    
+    public let code: Int
+    
+    public let path: String
+    
+}
+
+extension FileErrorDetail {
+    var error: Error? { return makeError(code: code, type: FileStationError.self) }
+}
+
+extension FileErrorDetail: CustomStringConvertible {
+    public var description: String {
+        return [
+            error?.localizedDescription
+                ?? "error \(code)",
+            path,
+            ].joined(separator: ": ")
+    }
+}
+
 /// All API responses are encoded in the JSON format, and the JSON response contains elements as follows:
 public struct Response<T: Decodable>: Decodable {
     
@@ -35,17 +57,9 @@ public struct Response<T: Decodable>: Decodable {
         /// An error code will be returned when a request fails. There are two kinds of error codes: a common error code which is shared between all APIs; the other is a specific API error code (described under the corresponding API spec).
         public let code: Int
         
-        public struct Error: Decodable {
-    
-            public let code: Int
-            
-            public let path: String
-        
-        }
-        
         /// The array contains detailed error information of each file. Each element within errors is a JSON-Style Object which contains an error code and other information, such as a file path or name.
         /// - Note: When there is no detailed information, this error element won’t be responded.
-        public let errors: [Error]?
+        public let errors: [FileErrorDetail]?
     
     }
     
@@ -57,13 +71,19 @@ extension Response.Error: Error {
     
 }
 
-public func decode<T>(data: Data) throws -> T? where T: Decodable {
+public func decode<T>(data: Data) throws -> T where T: Decodable & ErrorInfo {
     let response = try JSONDecoder().decode(Response<T>.self, from: data)
-    if response.success {
-        return response.data
+//    print(response)
+    if response.success,
+        let data = response.data
+    {
+        return data
     } else {
+//        print(response)
         if let error = response.error {
-            throw NSError(domain: DSM.Error.domain, code: error.code, userInfo:["errors": error.errors ?? []])
+            let e = makeError(code: error.code, type: T.ErrorType.self)
+            throw e.map({ FileError(error: $0, errors: error.errors)})
+                ?? NSError(domain: DSM.Error.domain, code: error.code, userInfo:["errors": error.errors ?? []])
         } else {
             print(#function, String(data: data, encoding: .utf8) ?? "not utf8?")
             throw DSM.Error.invalidResponse
@@ -93,7 +113,14 @@ public struct APIInfo: Codable {
 
 public typealias APIInfoData = [String: APIInfo]
 
-public struct APILoginData: Codable {
+// FIXME: ugly
+extension APIInfoData: ErrorInfo {
+    public typealias ErrorType = APIError
+}
+
+public struct APILoginData: Codable, ErrorInfo {
+    public typealias ErrorType = AuthError
+    
     /// Authorized session ID. When the user log in with format=sid, cookie will not be set and each API request should provide a request parameter _sid=< sid> along with other parameters.
     public let sessionId: String
     

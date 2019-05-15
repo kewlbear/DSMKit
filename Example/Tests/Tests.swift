@@ -22,6 +22,7 @@
 
 import UIKit
 import XCTest
+@testable
 import DSMKit
 import DSMKit_Example
 
@@ -46,7 +47,10 @@ class Tests: XCTestCase {
     }
     
     func testLogin() {
-        get(API.Auth.login(account: profile.account, password: profile.password, session: "dsmkit", format: .cookie))
+        get(API.Auth.login(account: profile.account, password:
+            profile.password
+//            ""
+            , session: "dsmkit", format: .cookie))
     }
 
     func testFileStationGetInfo() {
@@ -62,13 +66,18 @@ class Tests: XCTestCase {
         get(FileStation.List.listShare()) { data, error in
             share = data?.shares.first
         }
-        share.map { get(FileStation.List.list(folderPath: $0.path, offset: 1, limit: 2, sortBy: .crtime, sortDirection: .asc, pattern: " ", fileType: .dir, gotoPath: "xxx", additional: [.time])) }
+        share.map { get(FileStation.List.list(folderPath:
+//            "xx" +
+            $0.path
+            , offset: 1, limit: 2, sortBy: .crtime, sortDirection: .asc, pattern: " ", fileType: .dir, gotoPath: "xxx", additional: [.time])) }
     }
     
     func testCreateFolder() {
         typealias Item = FileStation.CreateFolder.Item
         let items = [
-            Item(folderPath: "\(directory)/aa", name: "a,a"),
+            Item(folderPath:
+//                "xx" +
+                "\(directory)/aa", name: "a,a"),
             Item(folderPath: "\(directory)/b,b", name: "bb"),
         ]
         get(FileStation.CreateFolder.create(items: items)) { (data, error) in
@@ -128,20 +137,30 @@ class Tests: XCTestCase {
         }
     }
     
+    func testError() {
+        let errors = [
+            makeError(code: 1100, type: CreateFolderError.self),
+            makeError(code: 408, type: CreateFolderError.self),
+            makeError(code: 104, type: CreateFolderError.self),
+        ]
+        for error in errors {
+            XCTAssertNotNil(error)
+        }
+        
+        XCTAssertNil(makeError(code: 0, type: CreateFolderError.self))
+    }
+    
     func get<T>(_ info: T?, completion: ((T.DataType?, Error?) -> Void)? = nil) where T: DecodableRequestInfo {
         let done = expectation(description: "done")
         info.map {
         profile.dsm.get($0) { data, error in
-            print(
-//                data ?? "no data?",
-                (error as NSError?).map { API.commonErrors[$0.code] ?? FileStation.commonErrors[$0.code] ?? "no description found" } ?? "no error")
 //            XCTAssertNotNil(data)
             XCTAssertNil(error)
             completion?(data, error)
             done.fulfill()
         }
         }
-        wait(for: [done], timeout: 3)
+        wait(for: [done], timeout: 30)
     }
     
 }
