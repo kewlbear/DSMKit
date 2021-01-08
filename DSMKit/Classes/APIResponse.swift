@@ -20,6 +20,8 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
+
 public struct FileErrorDetail: Codable {
     
     public let code: Int

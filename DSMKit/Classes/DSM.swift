@@ -20,6 +20,8 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
+
 // MARK: DSM errors
 
 public protocol DSMError: CustomNSError, RawRepresentable, CustomStringConvertible where RawValue == Int {
