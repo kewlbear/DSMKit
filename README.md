@@ -2,10 +2,9 @@
 
 Swift library for Synology DSM APIs
 
-[![CI Status](http://img.shields.io/travis/kewlbear/DSMKit.svg?style=flat)](https://travis-ci.org/kewlbear/DSMKit)
+![Build](https://github.com/kewlbear/DSMKit/workflows/swift/badge.svg)
 [![Version](https://img.shields.io/cocoapods/v/DSMKit.svg?style=flat)](http://cocoapods.org/pods/DSMKit)
 [![License](https://img.shields.io/cocoapods/l/DSMKit.svg?style=flat)](http://cocoapods.org/pods/DSMKit)
-[![Platform](https://img.shields.io/cocoapods/p/DSMKit.svg?style=flat)](http://cocoapods.org/pods/DSMKit)
 
 ## Usage
 
@@ -31,9 +30,17 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-Swift 4
+Swift 4+
 
 ## Installation
+
+### Swift Package Manager
+
+```
+.package(url: "https://github.com/kewlbear/DSMKit.git", from: "0.0.1")
+```
+
+### CocoaPods
 
 DSMKit is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
