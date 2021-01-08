@@ -2,7 +2,7 @@
 
 Swift library for Synology DSM APIs
 
-![Build](https://github.com/kewlbear/DSMKit/workflows/Swift/badge.svg)
+![Build](https://github.com/kewlbear/DSMKit/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/cocoapods/v/DSMKit.svg?style=flat)](http://cocoapods.org/pods/DSMKit)
 [![License](https://img.shields.io/cocoapods/l/DSMKit.svg?style=flat)](http://cocoapods.org/pods/DSMKit)
 
