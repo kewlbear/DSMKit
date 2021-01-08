@@ -20,6 +20,8 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
+
 enum ParameterName: String {
     case api
     case method
@@ -189,7 +191,7 @@ struct Parameter {
     }
     
     mutating func add(name: String, version: RangeType) {
-        let index = versions.index {
+        let index = versions.firstIndex {
             $0.1.contains(version.lowerBound)
         } ?? 0
         versions.insert((name, version), at: index)

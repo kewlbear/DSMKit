@@ -20,6 +20,8 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
+
 /// All File Station APIs are required to login with SYNO.API.Auth and session=FileStation.
 public enum FileStation: Namespace {
     
